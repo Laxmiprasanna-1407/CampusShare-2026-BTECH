@@ -1,0 +1,32 @@
+# Environments and Secrets
+.env
+*.env.local
+!.env.example
+
+# Build outputs
+backend/target/
+frontend/dist/
+*.class
+*.jar
+*.war
+
+# Dependencies
+frontend/node_modules/
+
+# Logs and runtime databases
+logs/
+data/
+backend/logs/
+backend/data/
+*.log
+*.db
+*.mv.db
+*.lock.db
+
+# IDE and OS files
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+*.zip

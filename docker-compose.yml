@@ -1,0 +1,72 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: campusshare-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_NAME:-campusshare}
+      MYSQL_USER: ${DB_USERNAME:-campus_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-campus_secret_2026}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-campus_root_secret_2026}
+    ports:
+      - "${DB_PORT:-3306}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD:-campus_root_secret_2026}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - campusshare-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: campusshare-backend
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SERVER_PORT: 8080
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: ${DB_NAME:-campusshare}
+      DB_USERNAME: ${DB_USERNAME:-campus_user}
+      DB_PASSWORD: ${DB_PASSWORD:-campus_secret_2026}
+      JWT_SECRET: ${JWT_SECRET:-campusshare_jwt_super_secure_secret_key_2026_capstone_must_be_long_enough_256bit}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@campusshare.edu}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-Admin@Campus2026!}
+      CORS_ALLOWED_ORIGINS: http://localhost:5173,http://127.0.0.1:5173,http://localhost:80
+      LLM_API_KEY: ${LLM_API_KEY:-}
+      LLM_API_URL: ${LLM_API_URL:-https://api.openai.com/v1/chat/completions}
+      LLM_MODEL: ${LLM_MODEL:-gpt-3.5-turbo}
+    ports:
+      - "8080:8080"
+    networks:
+      - campusshare-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: campusshare-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "5173:80"
+    networks:
+      - campusshare-network
+
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  campusshare-network:
+    driver: bridge

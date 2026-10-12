@@ -17,11 +17,12 @@ FROM eclipse-temurin:21-jre-jammy
 WORKDIR /app
 
 # Run as non-root user for security
-RUN groupadd -r campus && useradd -r -g campus campus
+RUN groupadd -r campus && useradd -r -g campus campus \
+    && mkdir -p /app/logs \
+    && chown -R campus:campus /app
 USER campus
 
-COPY --from=build /app/target/campusshare-backend-1.0.0.jar app.jar
-
+COPY --from=build --chown=campus:campus /app/target/campusshare-backend-1.0.0.jar app.jar
 ENV SERVER_PORT=8080
 ENV SPRING_PROFILES_ACTIVE=docker
 EXPOSE 8080

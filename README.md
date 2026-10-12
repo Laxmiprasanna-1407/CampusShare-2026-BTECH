@@ -2,6 +2,23 @@
 
 > A full-stack, enterprise-grade university capstone project engineered for students to lend and rent essential academic equipment (calculators, lab gear, textbooks, chargers) securely, affordably, and peer-to-peer.
 
+## 🌐 Live Demo
+
+| Service | Link |
+|---|---|
+| **Frontend (Web App)** | https://campusshare-2026-btech-frontend.onrender.com |
+| **Backend API** | https://campusshare-2026-btech-3.onrender.com |
+| **API Health Check** | https://campusshare-2026-btech-3.onrender.com/actuator/health |
+| **Swagger / API Docs** | https://campusshare-2026-btech-3.onrender.com/swagger-ui/index.html |
+| **GitHub Repository** | https://github.com/<your-username>/CampusShare |
+
+> ⏳ **Note:** Hosted on Render's free tier, so the first request after inactivity can take 30–60 seconds while the server wakes up.
+
+### Demo Login
+| Role | Email | Password |
+|---|---|---|
+| Student | Register a new account on the site | your own password |
+| Admin | `<your ADMIN_EMAIL>` | share this separately, don't put it in the README |
 ---
 
 ## 📌 1. Project Abstract
